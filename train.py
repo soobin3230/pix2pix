@@ -51,12 +51,15 @@ def main():
         saver = tf.train.Saver()
 
         with tf.Session() as sess:
+            if hp.is_restore:
+                saver.restore(sess, tf.train.latest_checkpoint(hp.save_dir))
+                print("restore successfully!")
             train_writer = tf.summary.FileWriter(hp.save_dir + '/train',
                                                  sess.graph)
             init = tf.global_variables_initializer()
             sess.run(init)
 
-            for epoch in xrange(hp.num_epochs):
+            for epoch in range(hp.num_epochs):
 
                 mixture, vocals = dataset_shuffling(mixture, vocals)
                 for i in range(num_batch):
@@ -67,7 +70,7 @@ def main():
                     global_step += 1
                     if global_step % 100 == 0:
                         disc_loss, gen_loss, l1_loss, summary = sess.run([g.wgan_loss, g.gen_loss, g.l1_loss, g.merged], feed_dict={g.mixture: batch_mixture, g.true_vocal: batch_vocal})
-                        print "step %d, disc_loss:%.4f, gen_loss:%.4f, l1_loss:%.4f" %(i,disc_loss, gen_loss, l1_loss)
+                        print("step %d, disc_loss:%.4f, gen_loss:%.4f, l1_loss:%.4f" %(i,disc_loss, gen_loss, l1_loss))
                         saver.save(sess, hp.save_dir+"/model_%d.ckpt" % (global_step))
                         train_writer.add_summary(summary, global_step)
 
