@@ -23,5 +23,5 @@ I used DSD100 dataset which consists of pairs of mixture audio files and vocal a
   * STEP 2. Download and extract DSD100 data as mentioned above at 'data' directory, and run `data.py`.
   * STEP 3. Run `train.py`. 
 
-## Notes
-  * I didn't implement evaluation code yet, but i will update soon.
+## Generate seperated vocal audio
+  * Prepare a test data (the name of this data should be defined at hyperparams.py) and locate it in 'data' directory and run `eval.py`.

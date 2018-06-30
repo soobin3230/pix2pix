@@ -27,4 +27,5 @@ batch_size = 32
 num_epochs = 100
 save_dir = './logdir'
 
+is_restore = False
 is_training = True

@@ -24,6 +24,9 @@ def _get_rawwave(_input):
 def _rawwave_to_spectrogram(_input):
     return librosa.stft(y=_input, n_fft=hp.fft_size, hop_length=hp.hop_length, win_length=hp.window_size)
 
+def _spectrogram_to__rawwave(_input):
+    return librosa.istft(_input, hop_length=hp.hop_length, win_length=hp.window_size)
+
 def _get_spectrogram():
 
     rawwave_size = hp.duration * hp.sample_rate
@@ -43,13 +46,13 @@ def _get_spectrogram():
                 arrays.append(_rawwave_to_spectrogram(mixture[k*rawwave_size : (k+1)*rawwave_size]))
                 arrays_2.append(_rawwave_to_spectrogram(vocal[k*rawwave_size : (k+1)*rawwave_size]))
 
-        print "start save files..."
+        print("start save files...")
         np.save(hp.mixture_data, np.expand_dims(np.stack(arrays), axis=-1))
         np.save(hp.vocal_data, np.expand_dims(np.stack(arrays_2), axis=-1))
-        print "save done!"
+        print("save done!")
 
     else:
-        raw_wave = _get_rawwave(hp.eval_wav)
+        raw_wave = _get_rawwave(hp.eval_wav)[0]
         data_length = len(raw_wave)
         num_spectrograms = data_length // rawwave_size
         arrays = []
